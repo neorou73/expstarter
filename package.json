@@ -1,0 +1,28 @@
+{
+  "name": "expstarter",
+  "version": "1.0.0",
+  "description": "node js web app starter",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neorou73/expstarter.git"
+  },
+  "keywords": [
+    "starter",
+    "node",
+    "npm",
+    "javascript"
+  ],
+  "author": "Kris Poedjosoedarmo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/neorou73/expstarter/issues"
+  },
+  "homepage": "https://github.com/neorou73/expstarter#readme",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
+}
