@@ -1,0 +1,11 @@
+{
+  "user": {
+    "id": 0,
+    "name": "",
+    "username": "",
+    "email": "",
+    "created": "1970-01-01",
+    "active": true,
+    "password": "66a45e67a09b12c567bcdef0101f"
+  }
+}

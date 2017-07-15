@@ -40,8 +40,21 @@ var userLogout = function(userData, cb) {
   cb(null, {});
 };
 
-var resetUserPasssword = function(userData, cb) {
-  cb(null, {});
+var resetUserPassword = function(userData, cb) {
+  if (userData.hasOwnProperty('password')) {
+    userData.password = hashPassword(userData.password);
+    cb(null, userData);
+  } else {
+    cb({ status: '400', message: 'no password passed to system', error: 'Bad Request'});
+  }
+};
+
+var hashPassword = function(clearText) {
+  const crypto = require('crypto');
+  const hash = crypto.createHash('sha512');
+  hash.update(clearText);
+  var hashedPassword = hash.digest('hex');
+  return hashedPassword;
 };
 
 var activateUser = function(userData, cb) {
