@@ -11,10 +11,10 @@ app.get('/hash-test/:clearText', function(req, res) {
   if (req.params.hasOwnProperty('clearText')) {
     var hashedPassword = sm.hashPassword(req.params.clearText);
     var output = req.params.clearText + ' outputs: ' + hashedPassword;
+    res.send(output);
   } else {
-    var output = 'invalid request';
+    res.status(400).json({ error: 'invalid request' });
   }
-  res.send(output);
 });
 
 app.get('/example/:exampleType', function(req, res) {
@@ -26,7 +26,7 @@ app.get('/example/:exampleType', function(req, res) {
     res.type('json');
     res.send(userTemplate);
   } else {
-    res.send('invalid request');
+    res.status(400).json({ error: 'invalid request' });
   }
 
 });
