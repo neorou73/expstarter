@@ -12,9 +12,23 @@ app.get('/hash-test/:clearText', function(req, res) {
     var hashedPassword = sm.hashPassword(req.params.clearText);
     var output = req.params.clearText + ' outputs: ' + hashedPassword;
   } else {
-    var output = 'nothing passed: '
+    var output = 'invalid request';
   }
   res.send(output);
+});
+
+app.get('/example/:exampleType', function(req, res) {
+  if (req.params.hasOwnProperty('exampleType')) {
+    var exampleType = req.params.exampleType;
+  }
+  if (exampleType && exampleType == 'user' || exampleType && exampleType == 'group') {
+    var userTemplate = require('./lib/templates/' + exampleType + '.json');
+    res.type('json');
+    res.send(userTemplate);
+  } else {
+    res.send('invalid request');
+  }
+
 });
 
 app.listen(3000, function () {
