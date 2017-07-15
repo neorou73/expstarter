@@ -11,4 +11,47 @@ var Startermain = function() {
   }
 };
 
+// users
+var createUser = function(userData, cb) {
+  cb(null, {});
+};
+
+var validateUser = function(userData, cb) {
+  cb(null, {});
+};
+
+var userExists = function(userData, cb) {
+  cb(null, {});
+};
+
+var deleteUser = function(userData, cb) {
+  cb(null, {});
+};
+
+var userHasDependents = function(userData, cb) {
+  cb(null, {});
+};
+
+var userLogin = function(userData, cb) {
+  cb(null, {});
+};
+
+var userLogout = function(userData, cb) {
+  cb(null, {});
+};
+
+var resetUserPasssword = function(userData, cb) {
+  cb(null, {});
+};
+
+var activateUser = function(userData, cb) {
+  cb(null, {});
+};
+
+var deactivateUser = function(userData, cb) {
+  cb(null, {});
+};
+
+// groups
+
 module.exports = Startermain;
