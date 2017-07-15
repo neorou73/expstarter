@@ -59,11 +59,25 @@ Startermain.prototype.validateUuid = function(checkThis) {
 
 // users
 Startermain.prototype.createUser = function(userData, cb) {
-  cb(null, {});
+  if (this.validateUser(userData)) {
+    cb(null, userData);
+  } else {
+    cb({ status: 400, message: 'user data invalid', error: 'Bad Request' });
+  }
 };
 
-Startermain.prototype.validateUser = function(userData, cb) {
-  cb(null, {});
+Startermain.prototype.validateUser = function(userData) {
+  validity = true;
+  var properties = ['id','name','username','email','password'];
+  for (var p=0;p<properties.length;p++) {
+    if (!userData.hasOwnProperty(properties[p])) {
+      validity = false;
+    }
+  }
+  if (!this.validateUuid(userData.id)) {
+    validity = false;
+  }
+  return validity;
 };
 
 Startermain.prototype.userExists = function(userData, cb) {
@@ -91,7 +105,7 @@ Startermain.prototype.resetUserPassword = function(userData, cb) {
     userData.password = this.hashPassword(userData.password);
     cb(null, userData);
   } else {
-    cb({ status: '400', message: 'no password passed to system', error: 'Bad Request'});
+    cb({ status: 400, message: 'no password passed to system', error: 'Bad Request'});
   }
 };
 
