@@ -29,6 +29,23 @@ Startermain.prototype.hasValidDatabase = function() {
   }
 };
 
+Startermain.prototype.createRelationalDb = function() {
+  var fileLocation = this.config.templates + '/createRelationalDb.sql';
+  var fs = require('fs');
+  var queries = fs.readFileSync(fileLocation);
+  var sqlite3 = require('sqlite3').verbose();
+  var db = new sqlite3.Database('startermain.db');
+  db.serialize(function() {
+    db.run("drop table if exists user");
+    db.run("drop table if exists usergroup");
+    db.run("drop table if exists usergroupmembership");
+    db.run("create table user (id PRIMARY KEY NOT NULL, name NOT NULL, username unique NOT NULL, email NOT NULL, created TIMESTAMP NOT NULL default CURRENT_TIMESTAMP, active default 'true' NOT NULL, password NOT NULL)");
+    db.run("create table usergroup (id PRIMARY KEY NOT NULL, name NOT NULL, created TIMESTAMP NOT NULL default CURRENT_TIMESTAMP, active DEFAULT 'true' NOT NULL)");
+    db.run("create table usergroupmembership (id PRIMARY KEY NOT NULL, userid NOT NULL, groupid NOT NULL, FOREIGN KEY(userid) REFERENCES user(id), FOREIGN KEY(groupid) REFERENCES usergroup(id))");
+  });
+  db.close();
+}
+
 // issue a uuid version 4
 Startermain.prototype.issueUuidV4 = function() {
   var uuid = require('uuid4');

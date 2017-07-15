@@ -17,6 +17,11 @@ app.get('/hash-test/:clearText', function(req, res) {
   }
 });
 
+app.get('/create-database', function(req, res) {
+  sm.createRelationalDb();
+  res.send('done');
+});
+
 app.get('/issue-uuid', function(req, res) {
   res.send(sm.issueUuidV4());
 });
