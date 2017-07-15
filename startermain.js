@@ -29,6 +29,17 @@ Startermain.prototype.hasValidDatabase = function() {
   }
 };
 
+// issue a uuid version 4
+Startermain.prototype.issueUuidV4 = function() {
+  var uuid = require('uuid4');
+  return uuid();
+};
+
+Startermain.prototype.validateUuid = function(checkThis) {
+  var uuid = require('uuid4');
+  return uuid.valid(checkThis);
+};
+
 // users
 Startermain.prototype.createUser = function(userData, cb) {
   cb(null, {});

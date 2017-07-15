@@ -17,6 +17,10 @@ app.get('/hash-test/:clearText', function(req, res) {
   }
 });
 
+app.get('/issue-uuid', function(req, res) {
+  res.send(sm.issueUuidV4());
+});
+
 app.get('/example/:exampleType', function(req, res) {
   if (req.params.hasOwnProperty('exampleType')) {
     var exampleType = req.params.exampleType;
