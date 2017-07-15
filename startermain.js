@@ -12,44 +12,44 @@ var Startermain = function() {
 };
 
 // users
-var createUser = function(userData, cb) {
+Startermain.prototype.createUser = function(userData, cb) {
   cb(null, {});
 };
 
-var validateUser = function(userData, cb) {
+Startermain.prototype.validateUser = function(userData, cb) {
   cb(null, {});
 };
 
-var userExists = function(userData, cb) {
+Startermain.prototype.userExists = function(userData, cb) {
   cb(null, {});
 };
 
-var deleteUser = function(userData, cb) {
+Startermain.prototype.deleteUser = function(userData, cb) {
   cb(null, {});
 };
 
-var userHasDependents = function(userData, cb) {
+Startermain.prototype.userHasDependents = function(userData, cb) {
   cb(null, {});
 };
 
-var userLogin = function(userData, cb) {
+Startermain.prototype.userLogin = function(userData, cb) {
   cb(null, {});
 };
 
-var userLogout = function(userData, cb) {
+Startermain.prototype.userLogout = function(userData, cb) {
   cb(null, {});
 };
 
-var resetUserPassword = function(userData, cb) {
+Startermain.prototype.resetUserPassword = function(userData, cb) {
   if (userData.hasOwnProperty('password')) {
-    userData.password = hashPassword(userData.password);
+    userData.password = this.hashPassword(userData.password);
     cb(null, userData);
   } else {
     cb({ status: '400', message: 'no password passed to system', error: 'Bad Request'});
   }
 };
 
-var hashPassword = function(clearText) {
+Startermain.prototype.hashPassword = function(clearText) {
   const crypto = require('crypto');
   const hash = crypto.createHash('sha512');
   hash.update(clearText);
@@ -57,11 +57,11 @@ var hashPassword = function(clearText) {
   return hashedPassword;
 };
 
-var activateUser = function(userData, cb) {
+Startermain.prototype.activateUser = function(userData, cb) {
   cb(null, {});
 };
 
-var deactivateUser = function(userData, cb) {
+Startermain.prototype.deactivateUser = function(userData, cb) {
   cb(null, {});
 };
 
