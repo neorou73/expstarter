@@ -59,3 +59,6 @@ typings/
 
 # non-versioned local copy
 starter.config.json
+
+# flat file databases
+jsonDb/

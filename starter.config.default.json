@@ -1,4 +1,16 @@
 {
   "port": 3000,
-  "host": "localhost"
+  "host": "localhost",
+  "database": [
+    {
+      "type": "relational",
+      "engine": "sqlite",
+      "fileLocation": "startermain.db"
+    },
+    {
+      "type": "unstructured",
+      "engine": "json",
+      "directoryRoot": "jsonDb"
+    }
+  ]
 }
