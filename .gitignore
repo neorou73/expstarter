@@ -62,3 +62,6 @@ starter.config.json
 
 # flat file databases
 jsonDb/
+
+# sqlite databases
+*.db

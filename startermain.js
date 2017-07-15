@@ -11,6 +11,24 @@ var Startermain = function() {
   }
 };
 
+// check database
+Startermain.prototype.hasValidDatabase = function() {
+  // check relational
+  if (this.config.hasOwnProperty('database')) {
+    this.database = {};
+    for (var d=0;d<this.config.database.length;d++) {
+      if (this.config.database[d].type == 'relational') {
+        this.database['relational'] = this.config.database[d];
+      } else if (this.config.database[d].type == 'unstructured') {
+        this.database['unstructured'] = this.config.database[d];
+      } else {}
+    }
+    return this.database;
+  } else {
+    return { error: 'Bad Request', code: 400, message: 'Database configuration error.'};
+  }
+};
+
 // users
 Startermain.prototype.createUser = function(userData, cb) {
   cb(null, {});

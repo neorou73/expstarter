@@ -21,10 +21,14 @@ app.get('/example/:exampleType', function(req, res) {
   if (req.params.hasOwnProperty('exampleType')) {
     var exampleType = req.params.exampleType;
   }
-  if (exampleType && exampleType == 'user' || exampleType && exampleType == 'group') {
+  if (exampleType && exampleType == 'user' || exampleType && exampleType == 'group' ) {
     var userTemplate = require('./lib/templates/' + exampleType + '.json');
     res.type('json');
     res.send(userTemplate);
+  } else if (exampleType && exampleType == 'database') {
+    var dbj = sm.hasValidDatabase();
+    res.type('json');
+    res.send(dbj);
   } else {
     res.status(400).json({ error: 'invalid request' });
   }
