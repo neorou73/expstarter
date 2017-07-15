@@ -31,6 +31,10 @@ app.get('/example/:exampleType', function(req, res) {
 
 });
 
-app.listen(3000, function () {
-  console.log('Example app listening on ' + sm.config.host + ', port ' + sm.config.port + '!');
-});
+if (sm.config.hasOwnProperty('port')) {
+  app.listen(sm.config.port, function () {
+    console.log('Example app listening on ' + sm.config.host + ', port ' + sm.config.port + '!');
+  });
+} else {
+  console.log('Startermain object has errors. Can not start application.');
+}
