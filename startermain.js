@@ -29,6 +29,15 @@ Startermain.prototype.hasValidDatabase = function() {
   }
 };
 
+Startermain.prototype.openRelationalDbHandle = function() {
+  var sqlite3 = require('sqlite3').verbose();
+  this.dbh = new sqlite3.Database('startermain.db');
+};
+
+Startermain.prototype.closeRelationalDbHandle = function() {
+  this.dbh.close();
+};
+
 Startermain.prototype.createRelationalDb = function() {
   var fileLocation = this.config.templates + '/createRelationalDb.sql';
   var fs = require('fs');
@@ -39,9 +48,11 @@ Startermain.prototype.createRelationalDb = function() {
     db.run("drop table if exists user");
     db.run("drop table if exists usergroup");
     db.run("drop table if exists usergroupmembership");
+    db.run("drop table if exists accesstoken");
     db.run("create table user (id PRIMARY KEY NOT NULL, name NOT NULL, username unique NOT NULL, email NOT NULL, created TIMESTAMP NOT NULL default CURRENT_TIMESTAMP, active default 'true' NOT NULL, password NOT NULL)");
     db.run("create table usergroup (id PRIMARY KEY NOT NULL, name NOT NULL, created TIMESTAMP NOT NULL default CURRENT_TIMESTAMP, active DEFAULT 'true' NOT NULL)");
     db.run("create table usergroupmembership (id PRIMARY KEY NOT NULL, userid NOT NULL, groupid NOT NULL, FOREIGN KEY(userid) REFERENCES user(id), FOREIGN KEY(groupid) REFERENCES usergroup(id))");
+    db.run("create table accesstoken (token PRIMARY KEY NOT NULL, userid NOT NULL, created TIMESTAMP NOT NULL default CURRENT_TIMESTAMP, FOREIGN KEY(userid) REFERENCES user(id))");
   });
   db.close();
 }
@@ -60,6 +71,13 @@ Startermain.prototype.validateUuid = function(checkThis) {
 // users
 Startermain.prototype.createUser = function(userData, cb) {
   if (this.validateUser(userData)) {
+    this.openRelationalDbHandle();
+    this.db.serialize(function() {
+      var stmt = this.dbh.prepare("insert into user (id, name, username, email, password) values (?, ?, ?, ?, ?)");
+      stmt.run(userData.id, userData.name, userData.username, userData.email, userData.password);
+      stmt.finalize();
+    });
+    this.closeRelationalDbHandle();
     cb(null, userData);
   } else {
     cb({ status: 400, message: 'user data invalid', error: 'Bad Request' });
@@ -80,8 +98,20 @@ Startermain.prototype.validateUser = function(userData) {
   return validity;
 };
 
-Startermain.prototype.userExists = function(userData, cb) {
-  cb(null, {});
+Startermain.prototype.userExists = function(userData, identifier) {
+  var exists = false;
+  var properties = ['id','name','username','email'];
+  for (var p=0;p<properties.length;p++) {
+    if (userData.hasOwnProperty(properties[p]) && userData[properties[p]] == identifier) {
+      exists = true;
+      break;
+    }
+  }
+  return exists;
+};
+
+Startermain.prototype.getUser = function (userData, cb) {
+
 };
 
 Startermain.prototype.deleteUser = function(userData, cb) {

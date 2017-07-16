@@ -60,3 +60,12 @@ insert into usergroupmembership (
   '20af9863-9471-43d1-9418-528a29c3b545',
   'b83f19c9-a4ee-461d-afc7-734f700dba17'
 );
+
+drop table if exists accesstoken;
+
+create table accesstoken (
+  token PRIMARY KEY NOT NULL,
+  userid NOT NULL,
+  created TIMESTAMP NOT NULL default CURRENT_TIMESTAMP,
+  FOREIGN KEY(userid) REFERENCES user(id)
+);
