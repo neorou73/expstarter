@@ -69,19 +69,23 @@ Startermain.prototype.validateUuid = function(checkThis) {
 };
 
 // users
-Startermain.prototype.createUser = function(userData, cb) {
-  if (this.validateUser(userData)) {
-    this.openRelationalDbHandle();
-    this.db.serialize(function() {
-      var stmt = this.dbh.prepare("insert into user (id, name, username, email, password) values (?, ?, ?, ?, ?)");
-      stmt.run(userData.id, userData.name, userData.username, userData.email, userData.password);
-      stmt.finalize();
-    });
-    this.closeRelationalDbHandle();
-    cb(null, userData);
-  } else {
-    cb({ status: 400, message: 'user data invalid', error: 'Bad Request' });
+Startermain.prototype.userExists = function(userData, identifier) {
+  var exists = false;
+  var properties = ['id','name','username','email'];
+  for (var p=0;p<properties.length;p++) {
+    if (userData.hasOwnProperty(properties[p]) && userData[properties[p]] == identifier) {
+      exists = true;
+      break;
+    }
   }
+  return exists;
+};
+
+Startermain.prototype.prepareUserData = function(fullName, userName, email, passwordString) {
+  var userData = { "username": userName, "name": fullName, "email": email };
+  userData['id'] = this.issueUuidV4();
+  userData['password'] = this.hashPassword(passwordString);
+  return userData;
 };
 
 Startermain.prototype.validateUser = function(userData) {
@@ -98,17 +102,22 @@ Startermain.prototype.validateUser = function(userData) {
   return validity;
 };
 
-Startermain.prototype.userExists = function(userData, identifier) {
-  var exists = false;
-  var properties = ['id','name','username','email'];
-  for (var p=0;p<properties.length;p++) {
-    if (userData.hasOwnProperty(properties[p]) && userData[properties[p]] == identifier) {
-      exists = true;
-      break;
-    }
+Startermain.prototype.createUser = function(userData, cb) {
+  if (this.validateUser(userData)) {
+    this.openRelationalDbHandle();
+    this.db.serialize(function() {
+      var stmt = this.dbh.prepare("insert into user (id, name, username, email, password) values (?, ?, ?, ?, ?)");
+      stmt.run(userData.id, userData.name, userData.username, userData.email, userData.password);
+      stmt.finalize();
+    });
+    this.closeRelationalDbHandle();
+    cb(null, userData);
+  } else {
+    cb({ status: 400, message: 'user data invalid', error: 'Bad Request' });
   }
-  return exists;
 };
+
+
 
 Startermain.prototype.getUser = function (userData, cb) {
 

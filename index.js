@@ -1,5 +1,7 @@
 const express = require('express');
+bodyParser = require('body-parser');
 const app = express();
+app.use(bodyParser.json());
 const startermain = require('./startermain');
 var sm = new startermain();
 
@@ -59,19 +61,36 @@ sampleData:
   }
 }
 
-
-
 SO....
 
-curl -H "Content-Type: application/json" -X POST -d '{  "userData": {"id": "1e2c15f9-2d96-47b1-8f59-d2c36d5079b4", "email": "someaddress@somedomain.com", "username": "theTank",  "name": "Frank Ricard",  "password":"cumon!"} }' http://localhost:8000/create-new-user
+curl -H "Content-Type: application/json" -X POST -d '{ "email": "someaddress@somedomain.com", "userName": "theTank",  "fullName": "Frank Ricard",  "passwordString":"cumon!" }' http://localhost:8000/create-new-user
+curl --data "email=me@company.com&userName=theTank&fullName=FrankRicard&passwordString=mang012345" http://localhost:8000/create-new-user
 */
 
 app.post('/create-new-user', function (req, res) {
-  if (!req.params.hasOwnProperty(userData)) {
+  // console.log(req.body);
+  var erroneous = false;
+  var properties = ['email', 'userName', 'passwordString', 'fullName'];
+  for (var p=0;p<properties.length;p++) {
+    if (!req.body.hasOwnProperty(properties[p])) {
+      erroneous = true;
+      break;
+    }
+  }
+  if (erroneous) {
     res.status(400).json({ error: 'improper user data request - please specify user data' });
   } else {
-    console.log(req.params);
-    res.send('user data recorded. thank you...');
+    var userData = sm.prepareUserData(fullName, userName, email, passwordString);
+    sm.createUser(userData, function(err, smcu) {
+      if (err) {
+        res.type('json');
+        res.send(err);
+      } else {
+        res.type('json');
+        res.send(smcu);
+      }
+    });
+
   }
 });
 
